@@ -1,0 +1,17 @@
+1. delete .git folder from both /client and /server
+2. go back to parent folder
+
+>>> git init
+>>> git add .
+>>> git commit -m "initial project setup"
+>>> git remote add origin https://github.com/breakpointdebug/__micro-ecom.git
+>>> git push --set-upstream origin master
+
+
+https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
+
+create new branch and do operations
+>>> git checkout -b "name of new branch"
+
+to switch;
+>>> git checkout "name of branch"

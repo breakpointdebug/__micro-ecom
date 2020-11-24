@@ -1,0 +1,12 @@
+AccountType
+	TypeName
+		Admin (full backend access)
+		Seller
+		Customer
+		CustomerAndSeller
+
+
+BuyerData = TransactionData
+SellerData = OrderData
+
+DeliveryData

@@ -1,0 +1,21 @@
+>>> npm i -g typescript@latest
+>>> npm i -g cross-env
+>>> npm i -g eslint
+>>> npm i -g @nestjs/cli
+
+when using .vscode/settings.json, find your root npm installation and update { typescript.tsdk }:
+>>> npm root -g
+
+>>> nest n <project name>
+>>> npm i apollo-server-express graphql graphql-tools
+>>> npm i uuid @types/uuid class-validator config
+>>> npm i @nestjs/graphql @nestjs/typeorm typeorm mongodb @types/mongodb
+
+
+at the time of this writing, nestjs is stuck at typescript@4.0.5
+
+
+>>> npx create-react-app <project name> --template typescript
+>>> npm i apollo-client @apollo/react-hooks apollo-cache-inmemory apollo-link-http graphql graphql-tag antd
+
+make sure you point to Typescript 4.1.2 at vscode so that tsconfig.json does not complain

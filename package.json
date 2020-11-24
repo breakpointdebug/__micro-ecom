@@ -1,0 +1,28 @@
+{
+  "name": "micro-ecom",
+  "version": "1.0.0",
+  "description": "Micro Ecommerce Fullstack, made in NestJS + GraphQL + ReactJS + Antd",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "npm start --prefix server",
+    "server": "npm start --prefix server",
+    "client": "wait-on tcp:3001 && npm start --prefix client",
+    "dev": "concurrently --kill-others-on-fail -n \"BACKEND,FRONTEND\" \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breakpointdebug/__micro-ecom.git"
+  },
+  "author": "breakpointdebug",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/breakpointdebug/__micro-ecom/issues"
+  },
+  "homepage": "https://github.com/breakpointdebug/__micro-ecom#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "wait-on": "^5.2.0"
+  }
+}

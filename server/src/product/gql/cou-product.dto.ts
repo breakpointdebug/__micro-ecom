@@ -4,8 +4,11 @@ import { MinLength } from 'class-validator';
 @InputType()
 export class CreateOrUpdateProduct {
 
-  @Field({ nullable: true, defaultValue: null })
-  _productCategoryId?: string;
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
+  productCategoryId?: string; // TODO: temporary nullable
+
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
+  sellerId?: string; // TODO: temporary nullable
 
   @MinLength(1)
   @Field()

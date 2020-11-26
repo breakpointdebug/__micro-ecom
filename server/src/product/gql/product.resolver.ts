@@ -22,9 +22,9 @@ export class ProductResolver {
 
   @Query(returns => [Product])
   async findAllProductsBySellerId(
-    @Args('_sellerId') _sellerId: string
+    @Args('sellerId') sellerId: string
   ) {
-    return this.productService.findAllProductsBySellerId(_sellerId);
+    return this.productService.findAllProductsBySellerId(sellerId);
   }
 
   @Mutation(returns => Product)

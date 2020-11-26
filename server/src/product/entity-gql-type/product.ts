@@ -1,54 +1,43 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity('products')
 @ObjectType('Product')
 export class Product {
 
-  private defaultsFromNull<T>(value: T) {
+  private nullOrValue(value) {
     return value === null ? null : value;
   }
 
   @BeforeInsert()
   beforeInsertActions() {
-    this._sellerId = this.defaultsFromNull<string>(this._sellerId);
-
-    // this._productCategoryId = ''; // temporary
-    // this._sellerId = '';  // temporary
-
-    // this.sku = this.sku ? this.sku : '';
-    // this.image = this.image ? this.image : '';
-    // this.description = this.description ? this.description : '';
-    // this.sellingPrice = this.sellingPrice ? this.sellingPrice : 0;
-    // this.avgReviewScore = this.avgReviewScore ? this.avgReviewScore : 0;
-    // this.isDeleted = this.isDeleted ? this.isDeleted : false;
-    // this.deleteReason = '';
-    // this.deletedAt = null;
+    // did not include nullable properties from DTO
+    // productCategoryId, sellerId, sku, image, description
+    // so that we also create columns on mongodb
+    this.avgReviewScore = this.nullOrValue(this.avgReviewScore);
+    this.isDeleted = this.isDeleted === true ? true : false;
+    this.deleteReason = this.nullOrValue(this.deleteReason);
+    this.deletedAt = this.nullOrValue(this.deletedAt);
   }
-
-  // @BeforeUpdate()
-  // beforeUpdateActions() {
-
-  // }
 
   // what?! defaults don't work for typeorm if linking with mongodb,
   // in case of graphql objectypes, you gotta specify if its nullable if you are lazy in passing all arguments on resolvers
   // your DTO can provide defaults
 
   @ObjectIdColumn()
-  _productId: string;
+  _productId: ObjectID;
 
   @PrimaryColumn()
   @Field(type => ID)
   productId: string;
 
   @Column()
-  @Field({ nullable: true })
-  _productCategoryId?: string;
+  @Field({ nullable: true }) // TODO: temporary nullable
+  productCategoryId?: string; // TODO: temporary nullable
 
   @Column()
-  @Field({ nullable: true})
-  _sellerId?: string;
+  @Field({ nullable: true }) // TODO: temporary nullable
+  sellerId?: string; // TODO: temporary nullable
 
   @Column()
   @Field()
@@ -67,16 +56,16 @@ export class Product {
   description?: string;
 
   @Column()
-  @Field({ defaultValue: 0.0 })
+  @Field()
   sellingPrice: number;
 
   @Column()
-  @Field({ defaultValue: 0.0 })
-  avgReviewScore: number;   // TODO: auto calculate average rating after new reviews left for this product.
+  @Field({ nullable: true })
+  avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
   @Column()
-  @Field({ defaultValue: true })
-  isDeleted: boolean;
+  @Field()
+  isDeleted?: boolean;
 
   @Column()
   @Field({ nullable: true })

@@ -8,9 +8,23 @@ export class ProductResolver {
 
   constructor(private productService: ProductService) {}
 
-  @Query(returns => String)
-  async test() {
-    return "hey";
+  @Query(returns => [Product])
+  async getAllActiveProducts() {
+    return this.productService.getAllActiveProducts();
+  }
+
+  @Query(returns => Product)
+  async findByProductId(
+    @Args('productId') productId: string
+  ) {
+    return this.productService.findByProductId(productId);
+  }
+
+  @Query(returns => [Product])
+  async findAllProductsBySellerId(
+    @Args('_sellerId') _sellerId: string
+  ) {
+    return this.productService.findAllProductsBySellerId(_sellerId);
   }
 
   @Mutation(returns => Product)
@@ -19,4 +33,11 @@ export class ProductResolver {
   ) {
     return this.productService.createProduct(createProductInput);
   }
+
+  // @Mutation(returns => Product)
+  // async updateProduct(
+  //   @Args('updateProductInput') updateProductInput: CreateOrUpdateProduct
+  // ) {
+  //   return this.productService.updateProduct("5fbee23c2654811a4017e3b7", updateProductInput);
+  // }
 }

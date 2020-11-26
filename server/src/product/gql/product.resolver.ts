@@ -19,4 +19,11 @@ export class ProductResolver {
   ) {
     return this.productService.createProduct(createProductInput);
   }
+
+  @Mutation(returns => Product)
+  async updateProduct(
+    @Args('updateProductInput') updateProductInput: CreateOrUpdateProduct
+  ) {
+    return this.productService.updateProduct("5fbee23c2654811a4017e3b7", updateProductInput);
+  }
 }

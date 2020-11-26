@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ObjectIdColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity('products')
@@ -6,7 +6,6 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 export class Product {
 
   @BeforeInsert()
-  @BeforeUpdate()
   beforeInsertActions() {
     // this._productCategoryId = ''; // temporary
     // this._sellerId = '';  // temporary
@@ -20,6 +19,12 @@ export class Product {
     this.deletedAt = null;
   }
 
+  @BeforeUpdate()
+  beforeUpdateActions() {
+
+  }
+
+
   @ObjectIdColumn()
   _productId: string;
 
@@ -27,7 +32,7 @@ export class Product {
   @Field(type => ID)
   productId: string;
 
-  @Column()
+  @Column({ default: null })
   @Field({ nullable: true })
   _productCategoryId?: string;
 
@@ -57,7 +62,7 @@ export class Product {
 
   @Column()
   @Field({ defaultValue: 0.0 })
-  avgReviewScore: number;
+  avgReviewScore: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
   @Column()
   @Field({ defaultValue: true })

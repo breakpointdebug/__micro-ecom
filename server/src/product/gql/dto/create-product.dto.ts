@@ -1,8 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { MinLength } from 'class-validator';
+import { ICreateOrUpdateProduct } from './cou-product.interface'
 
 @InputType()
-export class CreateOrUpdateProduct {
+export class CreateProduct implements ICreateOrUpdateProduct {
 
   @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
   productCategoryId?: string; // TODO: temporary nullable

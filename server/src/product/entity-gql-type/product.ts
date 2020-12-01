@@ -1,28 +1,9 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity('products')
 @ObjectType('Product')
 export class Product {
-
-  private nullOrValue(value) {
-    return value === null ? null : value;
-  }
-
-  @BeforeInsert()
-  beforeInsertActions() {
-    // did not include nullable properties from DTO
-    // productCategoryId, sellerId, sku, image, description
-    // so that we also create columns on mongodb
-    this.avgReviewScore = this.nullOrValue(this.avgReviewScore);
-    this.isDeleted = this.isDeleted === true ? true : false;
-    this.deleteReason = this.nullOrValue(this.deleteReason);
-    this.deletedAt = this.nullOrValue(this.deletedAt);
-  }
-
-  // what?! defaults don't work for typeorm if linking with mongodb,
-  // in case of graphql objectypes, you gotta specify if its nullable if you are lazy in passing all arguments on resolvers
-  // your DTO can provide defaults
 
   @ObjectIdColumn()
   _productId: ObjectID;
@@ -32,11 +13,11 @@ export class Product {
   productId: string;
 
   @Column()
-  @Field({ nullable: true }) // TODO: temporary nullable
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
   productCategoryId?: string; // TODO: temporary nullable
 
   @Column()
-  @Field({ nullable: true }) // TODO: temporary nullable
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
   sellerId?: string; // TODO: temporary nullable
 
   @Column()
@@ -44,11 +25,11 @@ export class Product {
   name: string;
 
   @Column()
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: null })
   sku?: string;
 
   @Column()
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: null })
   image?: string;
 
   @Column()
@@ -56,23 +37,23 @@ export class Product {
   description?: string;
 
   @Column()
-  @Field()
+  @Field({ defaultValue: 0 })
   sellingPrice: number;
 
   @Column()
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: null })
   avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: false})
   isDeleted?: boolean;
 
   @Column()
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: null })
   deleteReason?: string;
 
   @Column({ type: 'timestamp' })
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: null })
   deletedAt?: Date;
 
   @CreateDateColumn({ type: 'timestamp'})

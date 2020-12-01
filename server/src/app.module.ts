@@ -13,6 +13,7 @@ import * as config from 'config';
 import { Product } from './product/entity-gql-type/product';
 
 const dbConf = config.get('config.db');
+const gqlConf = config.get('config.gql');
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ const dbConf = config.get('config.db');
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      path: '/api'
+      path: gqlConf.url
     }),
     ProductModule
   ]

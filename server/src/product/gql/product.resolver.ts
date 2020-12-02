@@ -48,4 +48,11 @@ export class ProductResolver {
   ) {
     return this.productService.updateProduct(updateProductInput);
   }
+
+  @Mutation(returns => Product)
+  async deleteProduct(
+    @Args('productId') productId: string
+  ) {
+    return this.productService.deleteProduct(productId);
+  }
 }

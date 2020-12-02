@@ -44,9 +44,16 @@ export class ProductService {
     const { productId, productCategoryId } = updateProductInput;
     const product = await this.findByProductId(productId);
     if (product) {
+      // TODO: is the product id the ownership of the currently logged in user?
       updateProductInput.productId = productId ? format_uuid_v4(productId) : null;
       updateProductInput.productCategoryId = productCategoryId ? format_uuid_v4(productCategoryId) : null;
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }
+  }
+
+  async deleteProduct(productId: string): Promise<Product> {
+    // TODO: is the product id the ownership of the currently logged in user?
+    // do not delete if product has currently an active order that is undelivered yet.
+    return null;
   }
 }

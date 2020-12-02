@@ -1,9 +1,22 @@
-import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity('products')
 @ObjectType('Product')
 export class Product {
+
+  private nullOrValue(value) {
+    return value === null ? null : value;
+  }
+
+  @BeforeInsert()
+  beforeInsertActions() {
+    // defaults only work on dto if passed, not on defaults as defined if entity.
+    this.avgReviewScore = this.nullOrValue(this.avgReviewScore);
+    this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
+    this.deleteReason = this.nullOrValue(this.deleteReason);
+    this.deletedAt = this.nullOrValue(this.deletedAt);
+  }
 
   @ObjectIdColumn()
   _productId: ObjectID;
@@ -13,11 +26,11 @@ export class Product {
   productId: string;
 
   @Column()
-  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
+  @Field()
   productCategoryId?: string; // TODO: temporary nullable
 
   @Column()
-  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
+  @Field()
   sellerId?: string; // TODO: temporary nullable
 
   @Column()
@@ -25,38 +38,38 @@ export class Product {
   name: string;
 
   @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Field()
   sku?: string;
 
   @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Field()
   image?: string;
 
   @Column()
-  @Field({ nullable: true })
+  @Field()
   description?: string;
 
   @Column()
-  @Field({ defaultValue: 0 })
+  @Field()
   sellingPrice: number;
 
   @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Field()
   avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
   @Column()
-  @Field({ nullable: true, defaultValue: false})
+  @Field()
   isDeleted?: boolean;
 
   @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Field()
   deleteReason?: string;
 
   @Column({ type: 'timestamp' })
-  @Field({ nullable: true, defaultValue: null })
+  @Field({ nullable: true, defaultValue: null }) // dates needs nullable indicated
   deletedAt?: Date;
 
-  @CreateDateColumn({ type: 'timestamp'})
+  @CreateDateColumn({ type: 'timestamp' })
   @Field()
   createdAt: Date;
 }

@@ -29,9 +29,10 @@ export class ProductService {
     return products;
   }
 
-  async findProductsByName(name: string): Promise<Product> {
-    // const products = await this.productRepository.find({})
-    return null; // TODO: implementation
+  async findProductsByName(name: string): Promise<Product[]> {
+    const products = await this.productRepository.find({ where: { name: { $regex: `.*${name}.*`} } });
+    if (!products) throw new NotFoundException(`No products exist containing name: ${name}`);
+    return products;
   }
 
   async createProduct(createProductInput: CreateProduct): Promise<Product> {
@@ -48,11 +49,4 @@ export class ProductService {
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }
   }
-
-  // https://stackoverflow.com/questions/47792808/typeorm-update-item-and-return-it
-  // https://stackoverflow.com/questions/60645944/typeorm-hooks-not-being-triggered-minimal-project-included
-
-
-  // https://stackoverflow.com/questions/3305561/how-to-query-mongodb-with-like
-  // https://docs.mongodb.com/manual/reference/operator/aggregation/
 }

@@ -1,8 +1,16 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { CreateOrUpdateProduct } from './cou-product'
+import { InputType, PickType } from '@nestjs/graphql';
+import { Product } from '../../entity-gql-type/product';
 
 @InputType()
-export class CreateProduct extends CreateOrUpdateProduct {
-  @Field({ defaultValue: null }) // TODO: temporary nullable
-  sellerId?: string; // TODO: temporary nullable
+export class CreateProduct extends
+  PickType(Product,
+    [
+      'sellerId',
+      'productCategory',
+      'name',
+      'sku',
+      'image',
+      'description',
+      'sellingPrice'
+    ] as const) {
 }

@@ -1,26 +1,21 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from '../../_enums/product-category';
+import { nullOrValue } from '../../_utils/null-or-value';
 
-registerEnumType(ProductCategory, {
-  name:'ProductCategory'
-});
+registerEnumType(ProductCategory, { name: 'ProductCategory' });
 
 @Entity('products')
 @ObjectType('Product')
 export class Product {
 
-  private nullOrValue(value) {
-    return value === null ? null : value;
-  }
-
   @BeforeInsert()
   beforeInsertActions() {
     // defaults only work on dto if passed, not on defaults as defined if entity.
-    this.avgReviewScore = this.nullOrValue(this.avgReviewScore);
+    this.avgReviewScore = nullOrValue(this.avgReviewScore);
     this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
-    this.deleteReason = this.nullOrValue(this.deleteReason);
-    this.deletedAt = this.nullOrValue(this.deletedAt);
+    this.deleteReason = nullOrValue(this.deleteReason);
+    this.deletedAt = nullOrValue(this.deletedAt);
   }
 
   @ObjectIdColumn()

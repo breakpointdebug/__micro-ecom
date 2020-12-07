@@ -36,7 +36,6 @@ export class ProductService {
   }
 
   async createProduct(createProductInput: CreateProduct): Promise<Product> {
-    console.log({ ...createProductInput });
     const product = this.productRepository.create({ productId: create_uuid_v4(), ...createProductInput });
     return await this.productRepository.save(product);
   }

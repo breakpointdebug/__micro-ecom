@@ -29,30 +29,32 @@ export class ProductService {
     return products;
   }
 
-  async findProductsByName(name: string): Promise<Product> {
-    // const products = await this.productRepository.find({})
-    return null; // TODO: implementation
+  async findProductsByName(name: string): Promise<Product[]> {
+    const products = await this.productRepository.find({ where: { name: { $regex: `.*${name}.*`} } });
+    if (!products) throw new NotFoundException(`No products exist containing name: ${name}`);
+    return products;
   }
 
   async createProduct(createProductInput: CreateProduct): Promise<Product> {
+    console.log({ ...createProductInput });
     const product = this.productRepository.create({ productId: create_uuid_v4(), ...createProductInput });
     return await this.productRepository.save(product);
   }
 
   async updateProduct(updateProductInput: UpdateProduct): Promise<Product> {
-    const { productId, productCategoryId } = updateProductInput;
+    const { productId } = updateProductInput;
     const product = await this.findByProductId(productId);
     if (product) {
+      // TODO: is the product id the ownership of the currently logged in user?
       updateProductInput.productId = productId ? format_uuid_v4(productId) : null;
-      updateProductInput.productCategoryId = productCategoryId ? format_uuid_v4(productCategoryId) : null;
+      // updateProductInput.productCategoryId = productCategoryId ? format_uuid_v4(productCategoryId) : null;
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }
   }
 
-  // https://stackoverflow.com/questions/47792808/typeorm-update-item-and-return-it
-  // https://stackoverflow.com/questions/60645944/typeorm-hooks-not-being-triggered-minimal-project-included
-
-
-  // https://stackoverflow.com/questions/3305561/how-to-query-mongodb-with-like
-  // https://docs.mongodb.com/manual/reference/operator/aggregation/
+  async deleteProduct(productId: string): Promise<Product> {
+    // TODO: is the product id the ownership of the currently logged in user?
+    // do not delete if product has currently an active order that is undelivered yet.
+    return null;
+  }
 }

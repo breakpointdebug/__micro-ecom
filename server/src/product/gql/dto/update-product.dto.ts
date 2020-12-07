@@ -3,6 +3,6 @@ import { CreateOrUpdateProduct } from './cou-product'
 
 @InputType()
 export class UpdateProduct extends CreateOrUpdateProduct {
-  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
+  @Field({ defaultValue: null }) // TODO: temporary nullable
   productId?: string; // TODO: temporary nullable
 }

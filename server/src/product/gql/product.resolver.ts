@@ -9,6 +9,11 @@ export class ProductResolver {
 
   constructor(private productService: ProductService) {}
 
+  @Query(returns => String)
+  async test() {
+    return "done";
+  }
+
   @Query(returns => [Product])
   async getAllActiveProducts() {
     return this.productService.getAllActiveProducts();
@@ -47,5 +52,12 @@ export class ProductResolver {
     @Args('updateProductInput') updateProductInput: UpdateProduct
   ) {
     return this.productService.updateProduct(updateProductInput);
+  }
+
+  @Mutation(returns => Product)
+  async deleteProduct(
+    @Args('productId') productId: string
+  ) {
+    return this.productService.deleteProduct(productId);
   }
 }

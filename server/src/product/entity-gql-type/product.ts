@@ -1,5 +1,10 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { ProductCategory } from '../../_enums/product-category';
+
+registerEnumType(ProductCategory, {
+  name:'ProductCategory'
+});
 
 @Entity('products')
 @ObjectType('Product')
@@ -26,8 +31,8 @@ export class Product {
   productId: string;
 
   @Column()
-  @Field()
-  productCategoryId?: string; // TODO: temporary nullable
+  @Field(type => ProductCategory)
+  productCategory: ProductCategory;
 
   @Column()
   @Field()

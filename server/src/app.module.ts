@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AccountModule } from './account/account.module';
-import { SellerModule } from './seller/seller.module';
-import { BuyerModule } from './buyer/buyer.module';
 import { ProductModule } from './product/product.module';
-import { OrderModule } from './order/order.module';
+import { AccountModule } from './account/account.module';
+
+// import { SellerModule } from './seller/seller.module';
+// import { BuyerModule } from './buyer/buyer.module';
+// import { OrderModule } from './order/order.module';
 
 import * as config from 'config';
 
@@ -29,9 +30,11 @@ const gqlConf = config.get('config.gql');
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      path: gqlConf.url
+      path: gqlConf.url,
+      context: ({ req }) => ({ req })
     }),
-    ProductModule
+    ProductModule,
+    AccountModule
   ]
 })
 export class AppModule {}

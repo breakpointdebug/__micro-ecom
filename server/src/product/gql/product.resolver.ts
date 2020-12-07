@@ -9,6 +9,11 @@ export class ProductResolver {
 
   constructor(private productService: ProductService) {}
 
+  @Query(returns => String)
+  async test() {
+    return "done";
+  }
+
   @Query(returns => [Product])
   async getAllActiveProducts() {
     return this.productService.getAllActiveProducts();

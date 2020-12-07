@@ -36,17 +36,18 @@ export class ProductService {
   }
 
   async createProduct(createProductInput: CreateProduct): Promise<Product> {
+    console.log({ ...createProductInput });
     const product = this.productRepository.create({ productId: create_uuid_v4(), ...createProductInput });
     return await this.productRepository.save(product);
   }
 
   async updateProduct(updateProductInput: UpdateProduct): Promise<Product> {
-    const { productId, productCategoryId } = updateProductInput;
+    const { productId } = updateProductInput;
     const product = await this.findByProductId(productId);
     if (product) {
       // TODO: is the product id the ownership of the currently logged in user?
       updateProductInput.productId = productId ? format_uuid_v4(productId) : null;
-      updateProductInput.productCategoryId = productCategoryId ? format_uuid_v4(productCategoryId) : null;
+      // updateProductInput.productCategoryId = productCategoryId ? format_uuid_v4(productCategoryId) : null;
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }
   }

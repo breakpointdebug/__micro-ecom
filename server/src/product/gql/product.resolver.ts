@@ -3,7 +3,6 @@ import { Product } from '../entity-gql-type/product';
 import { ProductService } from '../product.service';
 import { CreateProduct } from './dto/create-product.dto';
 import { UpdateProduct } from './dto/update-product.dto';
-import { Result } from '../../_utils/ResultTypeGQL';
 
 @Resolver(of => Product)
 export class ProductResolver {
@@ -55,8 +54,7 @@ export class ProductResolver {
     return this.productService.updateProduct(updateProductInput);
   }
 
-  // TODO: passing of result after a delete, currently, fails compilation
-  @Mutation(returns => Result)
+  @Mutation(returns => Product)
   async deleteProduct(
     @Args('productId') productId: string
   ) {

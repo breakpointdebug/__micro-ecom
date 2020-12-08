@@ -1,11 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Product } from './entity-gql-type/product';
 import { CreateProduct } from './gql/dto/create-product.dto';
 import { UpdateProduct } from './gql/dto/update-product.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
-import { Result } from '../_utils/ResultTypeGQL';
 
 @Injectable()
 export class ProductService {
@@ -46,16 +45,32 @@ export class ProductService {
     if (!productId) throw new BadRequestException(`productId required`);
     const product = await this.findByProductId(productId);
     if (product) {
-      updateProductInput.productId = format_uuid_v4(productId);
+
+      delete updateProductInput.productId;
+
+      if (updateProductInput.sku === null) {
+        delete updateProductInput.sku;
+      }
+
+      if (updateProductInput.image === null) {
+        delete updateProductInput.image;
+      }
+
+      if (updateProductInput.description === null) {
+        delete updateProductInput.description;
+      }
+
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }
   }
 
-  async deleteProduct(productId: string): Promise<Result> {
+  async deleteProduct(productId: string): Promise<Product> {
+    // TODO: delete reason
     // TODO: is the product id the ownership of the currently logged in user?
     // TODO: do not delete if product has currently an active order that is undelivered yet.
-    if (await this.findByProductId(productId)) {
-      return new Result(await this.productRepository.update({ isDeleted: true }, { productId }));
+    const product = await this.findByProductId(productId);
+    if (product) {
+      return await this.productRepository.save({ ...product, isDeleted: true, deletedAt: new Date() });
     }
   }
 }

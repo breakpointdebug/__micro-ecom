@@ -20,7 +20,7 @@ const gqlConf = config.get('config.gql');
   imports: [
     TypeOrmModule.forRoot({
       type: dbConf.type,
-      url: dbConf.url,
+      url: dbConf.url_remote,
       useUnifiedTopology: true,
       useNewUrlParser: true,
       synchronize: true,

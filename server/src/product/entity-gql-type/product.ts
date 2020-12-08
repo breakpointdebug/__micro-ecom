@@ -1,26 +1,31 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from '../../_enums/product-category';
+import { nullOrValue } from '../../_utils/null-or-value';
+import { MinLength } from 'class-validator';
 
-registerEnumType(ProductCategory, {
-  name:'ProductCategory'
-});
+registerEnumType(ProductCategory, { name: 'ProductCategory' });
+
+/*
+-- typeorm
+-- @nestjs/graphql
+-- class-validator
+*/
 
 @Entity('products')
-@ObjectType('Product')
+@InputType('ProductInput')
+@ObjectType('ProductType')
 export class Product {
 
-  private nullOrValue(value) {
-    return value === null ? null : value;
-  }
-
+  // https://github.com/typeorm/typeorm/blob/master/docs/listeners-and-subscribers.md#beforeinsert
   @BeforeInsert()
   beforeInsertActions() {
     // defaults only work on dto if passed, not on defaults as defined if entity.
-    this.avgReviewScore = this.nullOrValue(this.avgReviewScore);
+    this.sku = nullOrValue(this.sku);
+    this.avgReviewScore = nullOrValue(this.avgReviewScore);
     this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
-    this.deleteReason = this.nullOrValue(this.deleteReason);
-    this.deletedAt = this.nullOrValue(this.deletedAt);
+    this.deleteReason = nullOrValue(this.deleteReason);
+    this.deletedAt = nullOrValue(this.deletedAt);
   }
 
   @ObjectIdColumn()
@@ -35,31 +40,32 @@ export class Product {
   productCategory: ProductCategory;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
   sellerId?: string; // TODO: temporary nullable
 
   @Column()
   @Field()
+  @MinLength(1)
   name: string;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   sku?: string;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   image?: string;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   description?: string;
 
   @Column()
-  @Field()
+  @Field({ defaultValue: 0 })
   sellingPrice: number;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
   @Column()
@@ -67,7 +73,7 @@ export class Product {
   isDeleted?: boolean;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   deleteReason?: string;
 
   @Column({ type: 'timestamp' })

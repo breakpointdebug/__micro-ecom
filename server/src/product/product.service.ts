@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { Product } from './entity-gql-type/product';
 import { CreateProduct } from './gql/dto/create-product.dto';
 import { UpdateProduct } from './gql/dto/update-product.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
+import { Result } from '../_utils/ResultTypeGQL';
 
 @Injectable()
 export class ProductService {
@@ -36,25 +37,25 @@ export class ProductService {
   }
 
   async createProduct(createProductInput: CreateProduct): Promise<Product> {
-    console.log({ ...createProductInput });
     const product = this.productRepository.create({ productId: create_uuid_v4(), ...createProductInput });
     return await this.productRepository.save(product);
   }
 
   async updateProduct(updateProductInput: UpdateProduct): Promise<Product> {
     const { productId } = updateProductInput;
+    if (!productId) throw new BadRequestException(`productId required`);
     const product = await this.findByProductId(productId);
     if (product) {
-      // TODO: is the product id the ownership of the currently logged in user?
-      updateProductInput.productId = productId ? format_uuid_v4(productId) : null;
-      // updateProductInput.productCategoryId = productCategoryId ? format_uuid_v4(productCategoryId) : null;
+      updateProductInput.productId = format_uuid_v4(productId);
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }
   }
 
-  async deleteProduct(productId: string): Promise<Product> {
+  async deleteProduct(productId: string): Promise<Result> {
     // TODO: is the product id the ownership of the currently logged in user?
-    // do not delete if product has currently an active order that is undelivered yet.
-    return null;
+    // TODO: do not delete if product has currently an active order that is undelivered yet.
+    if (await this.findByProductId(productId)) {
+      return new Result(await this.productRepository.update({ isDeleted: true }, { productId }));
+    }
   }
 }

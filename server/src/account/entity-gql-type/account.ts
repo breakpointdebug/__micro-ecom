@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AccountType } from 'src/_enums/account-type';
 

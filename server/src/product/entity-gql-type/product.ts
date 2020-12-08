@@ -17,6 +17,7 @@ registerEnumType(ProductCategory, { name: 'ProductCategory' });
 @ObjectType('ProductType')
 export class Product {
 
+  // https://github.com/typeorm/typeorm/blob/master/docs/listeners-and-subscribers.md#beforeinsert
   @BeforeInsert()
   beforeInsertActions() {
     // defaults only work on dto if passed, not on defaults as defined if entity.
@@ -39,7 +40,7 @@ export class Product {
   productCategory: ProductCategory;
 
   @Column()
-  @Field({ defaultValue: null }) // TODO: temporary nullable
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
   sellerId?: string; // TODO: temporary nullable
 
   @Column()
@@ -48,15 +49,15 @@ export class Product {
   name: string;
 
   @Column()
-  @Field({ defaultValue: null })
+  @Field({ nullable: true, defaultValue: null })
   sku?: string;
 
   @Column()
-  @Field({ defaultValue: null })
+  @Field({ nullable: true, defaultValue: null })
   image?: string;
 
   @Column()
-  @Field({ defaultValue: null })
+  @Field({ nullable: true, defaultValue: null })
   description?: string;
 
   @Column()
@@ -64,7 +65,7 @@ export class Product {
   sellingPrice: number;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
   @Column()
@@ -72,7 +73,7 @@ export class Product {
   isDeleted?: boolean;
 
   @Column()
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   deleteReason?: string;
 
   @Column({ type: 'timestamp' })

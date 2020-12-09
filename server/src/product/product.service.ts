@@ -17,19 +17,19 @@ export class ProductService {
     return products;
   }
 
-  async findByProductId(productId: string): Promise<Product> {
+  async getProductById(productId: string): Promise<Product> {
     const product = await this.productRepository.findOne({ productId: format_uuid_v4(productId) });
     if (!product) throw new NotFoundException(`Product ${productId} not found!`);
     return product;
   }
 
-  async findAllProductsBySellerId(sellerId: string): Promise<Product[]> {
+  async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
     const products = await this.productRepository.find({ sellerId: format_uuid_v4(sellerId) });
     if (!products) throw new NotFoundException(`No products exist for sellerId: ${sellerId}`);
     return products;
   }
 
-  async findProductsByName(name: string): Promise<Product[]> {
+  async getProductsByName(name: string): Promise<Product[]> {
     const products = await this.productRepository.find({ where: { name: { $regex: `.*${name}.*`} } });
     if (!products) throw new NotFoundException(`No products exist containing name: ${name}`);
     return products;
@@ -43,7 +43,7 @@ export class ProductService {
   async updateProduct(updateProductInput: UpdateProduct): Promise<Product> {
     const { productId } = updateProductInput;
     if (!productId) throw new BadRequestException(`productId required`);
-    const product = await this.findByProductId(productId);
+    const product = await this.getProductById(productId);
     if (product) {
 
       delete updateProductInput.productId;
@@ -68,7 +68,7 @@ export class ProductService {
     // TODO: delete reason
     // TODO: is the product id the ownership of the currently logged in user?
     // TODO: do not delete if product has currently an active order that is undelivered yet.
-    const product = await this.findByProductId(productId);
+    const product = await this.getProductById(productId);
     if (product) {
       return await this.productRepository.save({ ...product, isDeleted: true, deletedAt: new Date() });
     }

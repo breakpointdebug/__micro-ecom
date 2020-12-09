@@ -12,6 +12,7 @@ import { AccountModule } from './account/account.module';
 import * as config from 'config';
 
 import { Product } from './product/entity-gql-type/product';
+import { Account } from './account/entity-gql-type/account';
 
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');
@@ -25,7 +26,8 @@ const gqlConf = config.get('config.gql');
       useNewUrlParser: true,
       synchronize: true,
       entities: [
-        Product
+        Product,
+        Account
       ]
     }),
     GraphQLModule.forRoot({

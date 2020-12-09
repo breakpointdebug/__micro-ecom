@@ -16,48 +16,48 @@ export class ProductResolver {
 
   @Query(returns => [Product])
   async getAllActiveProducts() {
-    return this.productService.getAllActiveProducts();
+    return await this.productService.getAllActiveProducts();
   }
 
   @Query(returns => Product)
-  async findByProductId(
+  async getProductById(
     @Args('productId') productId: string
   ) {
-    return this.productService.findByProductId(productId);
+    return await this.productService.getProductById(productId);
   }
 
   @Query(returns => [Product])
-  async findAllProductsBySellerId(
+  async getAllProductsBySellerId(
     @Args('sellerId') sellerId: string
   ) {
-    return this.productService.findAllProductsBySellerId(sellerId);
+    return await this.productService.getAllProductsBySellerId(sellerId);
   }
 
   @Query(returns => [Product])
-  async findProductsByName(
+  async getProductsByName(
     @Args('name') name: string
   ) {
-    return this.productService.findProductsByName(name);
+    return await this.productService.getProductsByName(name);
   }
 
   @Mutation(returns => Product)
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProduct
   ) {
-    return this.productService.createProduct(createProductInput);
+    return await this.productService.createProduct(createProductInput);
   }
 
   @Mutation(returns => Product)
   async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProduct
   ) {
-    return this.productService.updateProduct(updateProductInput);
+    return await this.productService.updateProduct(updateProductInput);
   }
 
   @Mutation(returns => Product)
   async deleteProduct(
     @Args('productId') productId: string
   ) {
-    return this.productService.deleteProduct(productId);
+    return await this.productService.deleteProduct(productId);
   }
 }

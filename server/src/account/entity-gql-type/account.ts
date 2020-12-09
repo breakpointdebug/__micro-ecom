@@ -1,12 +1,18 @@
-import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AccountType } from 'src/_enums/account-type';
 
 registerEnumType(AccountType, { name: 'AccountType' });
 
 @Entity('accounts')
+@InputType('AccountInput')
 @ObjectType('Account')
 export class Account {
+
+  @BeforeInsert()
+  beforeInsertActions() {
+    this.isVerified = this.isVerified === true ? true : false;
+  }
 
   @ObjectIdColumn()
   _accountId: ObjectID;
@@ -40,8 +46,8 @@ export class Account {
   isVerified: boolean;
 
   @Column({ type: 'timestamp' })
-  @Field({ nullable: true, defaultValue: null }) // dates needs nullable indicated
-  verifiedAt: Date;
+  @Field({ nullable: true, defaultValue: null })
+  verifiedAt?: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
   @Field()

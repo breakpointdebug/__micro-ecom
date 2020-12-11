@@ -1,8 +1,8 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AccountType } from 'src/_enums/account-type';
-import { nullOrValue } from '../../_utils/null-or-value';
-import { IsEmail, MaxLength, MinLength } from 'class-validator';
+import { nullOrValue } from '../../_utils/null-utilities';
+import { IsEmail, Length } from 'class-validator';
 
 registerEnumType(AccountType, { name: 'AccountType' });
 
@@ -30,14 +30,12 @@ export class Account {
 
   @Column({ unique: true })
   @Field()
-  @MaxLength(50, { message: `50 characters max length for Username.` })
-  @MinLength(3, { message: `3 characters minimum for Username.` })
+  @Length(3, 50, { message: `Username should be between 3 and 50 characters.` })
   username: string;
 
   @Column()
   @Field()
-  @MaxLength(100, { message: `100 characters max length for Password.` })
-  @MinLength(8, { message: `8 characters minimum length for Password.` })
+  @Length(8, 100, { message: `Password should be between 8 and 100 characters.` })
   password: string;
 
   @Column()

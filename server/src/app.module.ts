@@ -17,6 +17,8 @@ import { Account } from './account/entity-gql-type/account';
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');
 
+// TODO: gql endpoint protection
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({

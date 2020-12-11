@@ -10,7 +10,7 @@ export class AccountResolver {
 
   constructor(private accountService: AccountService) {}
 
-  @Query(returns => [Account])
+  @Query(returns => Account)
   async getAccountById(
     @Args('accountId') accountId: string
   ) {

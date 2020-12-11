@@ -5,6 +5,7 @@ import { Product } from './entity-gql-type/product';
 import { CreateProduct } from './gql/dto/create-product.dto';
 import { UpdateProduct } from './gql/dto/update-product.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
+import { removeNullProperty } from '../_utils/null-utilities';
 
 @Injectable()
 export class ProductService {
@@ -48,17 +49,7 @@ export class ProductService {
 
       delete updateProductInput.productId;
 
-      if (updateProductInput.sku === null) {
-        delete updateProductInput.sku;
-      }
-
-      if (updateProductInput.image === null) {
-        delete updateProductInput.image;
-      }
-
-      if (updateProductInput.description === null) {
-        delete updateProductInput.description;
-      }
+      removeNullProperty<UpdateProduct>(updateProductInput);
 
       return await this.productRepository.save({ ...product, ...updateProductInput });
     }

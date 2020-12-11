@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Product } from './entity-gql-type/product';
 import { CreateProduct } from './gql/dto/create-product.dto';
 import { UpdateProduct } from './gql/dto/update-product.dto';
+import { DeleteProduct } from './gql/dto/delete-product.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
 import { removeNullProperty } from '../_utils/null-utilities';
 
@@ -55,13 +56,14 @@ export class ProductService {
     }
   }
 
-  async deleteProduct(productId: string): Promise<Product> {
+  async deleteProduct(deleteProductInput: DeleteProduct): Promise<Product> {
     // TODO: delete reason
     // TODO: is the product id the ownership of the currently logged in user?
     // TODO: do not delete if product has currently an active order that is undelivered yet.
+    const { productId, deleteReason } = deleteProductInput;
     const product = await this.getProductById(productId);
     if (product) {
-      return await this.productRepository.save({ ...product, isDeleted: true, deletedAt: new Date() });
+      return await this.productRepository.save({ ...product, isDeleted: true, deleteReason, deletedAt: new Date() });
     }
   }
 }

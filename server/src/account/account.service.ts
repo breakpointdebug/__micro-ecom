@@ -48,9 +48,4 @@ export class AccountService {
       return await this.accountRepository.save({ ...account, ...updateAccountInput });
     }
   }
-
-  async deleteAccount(accountId: string): Promise<Account> {
-    // TODO: implemetation
-    return null;
-  }
 }

@@ -33,11 +33,4 @@ export class AccountResolver {
   ) {
     return await this.accountService.updateAccount(updateAccountInput);
   }
-
-  @Mutation(returns => Account)
-  async deleteAccount(
-    @Args('accountId') accountId: string
-  ) {
-    return await this.accountService.deleteAccount(accountId);
-  }
 }

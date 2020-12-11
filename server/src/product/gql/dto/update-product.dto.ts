@@ -1,18 +1,8 @@
-import { Field, InputType, PickType } from '@nestjs/graphql';
-import { Product } from '../../entity-gql-type/product';
+import { Field, InputType } from '@nestjs/graphql';
+import { BaseProductDTO } from './product.dto';
 
 @InputType()
-export class UpdateProduct extends
-  PickType(Product,
-    [
-      'productCategory',
-      'name',
-      'sku',
-      'image',
-      'description',
-      'sellingPrice'
-    ]) {
-
+export class UpdateProduct extends BaseProductDTO {
   @Field()
   productId: string;
 }

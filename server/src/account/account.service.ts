@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from './entity-gql-type/account';
@@ -12,8 +12,8 @@ export class AccountService {
 
   constructor(@InjectRepository(Account) private accountRepository: Repository<Account>) {}
 
-  async getAccountById(accountId: string): Promise<Account[]> {
-    const account = await this.accountRepository.find({ accountId });
+  async getAccountById(accountId: string): Promise<Account> {
+    const account = await this.accountRepository.findOne({ accountId: format_uuid_v4(accountId) });
     if (!account) throw new NotFoundException(`Account "${accountId}" not found`);
     return account;
   }
@@ -29,9 +29,29 @@ export class AccountService {
     return await this.accountRepository.save(account);
   }
 
+  // TODO: proper validation for logical errors
   async updateAccount(updateAccountInput: UpdateAccount): Promise<Account> {
-    // TODO: implemetation
-    return null;
+    const { accountId } = updateAccountInput;
+    if (!accountId) throw new BadRequestException(`accountId required`);
+    const account = await this.getAccountById(accountId);
+    if (account) {
+
+      delete updateAccountInput.accountId;
+
+      if (updateAccountInput.username === null) {
+        delete updateAccountInput.username;
+      }
+
+      if (updateAccountInput.password === null) {
+        delete updateAccountInput.password;
+      }
+
+      if (updateAccountInput.email === null) {
+        delete updateAccountInput.email;
+      }
+
+      return await this.accountRepository.save({ ...account, ...updateAccountInput });
+    }
   }
 
   async deleteAccount(accountId: string): Promise<Account> {

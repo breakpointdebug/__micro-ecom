@@ -1,16 +1,8 @@
-import { InputType, PickType } from '@nestjs/graphql';
-import { Product } from '../../entity-gql-type/product';
+import { Field, InputType } from '@nestjs/graphql';
+import { BaseProductDTO } from './product.dto';
 
 @InputType()
-export class CreateProduct extends
-  PickType(Product,
-    [
-      'sellerId',
-      'productCategory',
-      'name',
-      'sku',
-      'image',
-      'description',
-      'sellingPrice'
-    ] as const) {
+export class CreateProduct extends BaseProductDTO {
+  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
+  sellerId?: string; // TODO: temporary nullable
 }

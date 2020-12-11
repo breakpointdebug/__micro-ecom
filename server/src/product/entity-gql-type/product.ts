@@ -2,7 +2,7 @@ import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColum
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from '../../_enums/product-category';
 import { nullOrValue } from '../../_utils/null-utilities';
-import { Length } from 'class-validator';
+import { IsPositive, Length } from 'class-validator';
 
 registerEnumType(ProductCategory, { name: 'ProductCategory' });
 
@@ -61,7 +61,8 @@ export class Product {
   description?: string;
 
   @Column()
-  @Field({ defaultValue: 0 })
+  @Field({ defaultValue: 1 })
+  @IsPositive({ message: `Selling Price needs to be greater than zero.`})
   sellingPrice: number;
 
   @Column()

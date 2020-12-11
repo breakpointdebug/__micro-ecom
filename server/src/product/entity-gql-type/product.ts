@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from '../../_enums/product-category';
 import { nullOrValue } from '../../_utils/null-utilities';
@@ -83,4 +83,8 @@ export class Product {
   @CreateDateColumn({ type: 'timestamp' })
   @Field()
   createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  @Field()
+  lastUpdatedAt: Date;
 }

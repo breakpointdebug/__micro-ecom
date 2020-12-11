@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AccountType } from 'src/_enums/account-type';
 import { nullOrValue } from '../../_utils/null-utilities';
@@ -58,4 +58,8 @@ export class Account {
   @CreateDateColumn({ type: 'timestamp' })
   @Field()
   createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  @Field()
+  lastUpdatedAt: Date;
 }

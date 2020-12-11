@@ -1,5 +1,11 @@
-import { InputType } from '@nestjs/graphql';
-import { BaseAccountDTO } from './account.dto';
+import { InputType, PickType } from '@nestjs/graphql';
+import { Account } from 'src/account/entity-gql-type/account';
 
 @InputType()
-export class CreateAccount extends BaseAccountDTO {};
+export class CreateAccount extends
+  PickType(Account, [
+    'accountType',
+    'username',
+    'password',
+    'email'
+  ] as const) {};

@@ -10,9 +10,10 @@ export class ProductResolver {
 
   constructor(private productService: ProductService) {}
 
+  // TODO: remove this gql endpoint
   @Query(returns => String)
   async test() {
-    return "done";
+    return "done, you can test quick code here upon running";
   }
 
   @Query(returns => [Product])

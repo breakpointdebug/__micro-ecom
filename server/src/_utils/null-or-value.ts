@@ -1,1 +1,0 @@
-export const nullOrValue = (value: any) =>  value === null ? null : value;

@@ -1,8 +1,8 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from '../../_enums/product-category';
-import { nullOrValue } from '../../_utils/null-or-value';
-import { MaxLength, MinLength } from 'class-validator';
+import { nullOrValue } from '../../_utils/null-utilities';
+import { Length } from 'class-validator';
 
 registerEnumType(ProductCategory, { name: 'ProductCategory' });
 
@@ -45,8 +45,7 @@ export class Product {
 
   @Column()
   @Field()
-  @MaxLength(200, { message: `200 characters max length for Product Name.` })
-  @MinLength(3, { message: `3 characters minimum length for Product Name.` })
+  @Length(3, 200, { message: `Product Name should be between 3 and 200 characters.` })
   name: string;
 
   @Column()

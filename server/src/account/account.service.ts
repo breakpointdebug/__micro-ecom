@@ -5,7 +5,8 @@ import { Account } from './entity-gql-type/account';
 import { CreateAccount } from './gql/dto/create-account.dto';
 import { UpdateAccount } from './gql/dto/update-account.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
-import * as bcrypt from 'bcryptjs';
+import { removeNullProperty } from '../_utils/null-utilities';
+import { giveSaltAndHash } from '../_utils/account-utilities';
 
 @Injectable()
 export class AccountService {
@@ -19,17 +20,15 @@ export class AccountService {
   }
 
   async createAccount(createAccountInput: CreateAccount): Promise<Account> {
-    const account = this.accountRepository.create({
-      accountId: create_uuid_v4(),
-      ...createAccountInput
-    });
-    const saltUsed = await bcrypt.genSalt();
-    account.salt = saltUsed;
-    account.password = await bcrypt.hash(createAccountInput.password, saltUsed);
+    const account = this.accountRepository.create({ accountId: create_uuid_v4(), ...createAccountInput });
+
+    const { salt, saltedPassword } = await giveSaltAndHash(account.password);
+    account.salt = salt;
+    account.password = saltedPassword;
+
     return await this.accountRepository.save(account);
   }
 
-  // TODO: proper validation for logical errors
   async updateAccount(updateAccountInput: UpdateAccount): Promise<Account> {
     const { accountId } = updateAccountInput;
     if (!accountId) throw new BadRequestException(`accountId required`);
@@ -38,17 +37,13 @@ export class AccountService {
 
       delete updateAccountInput.accountId;
 
-      if (updateAccountInput.username === null) {
-        delete updateAccountInput.username;
+      if (updateAccountInput.password) {
+        const { salt, saltedPassword } = await giveSaltAndHash(account.password);
+        account.salt = salt;
+        account.password = saltedPassword;
       }
 
-      if (updateAccountInput.password === null) {
-        delete updateAccountInput.password;
-      }
-
-      if (updateAccountInput.email === null) {
-        delete updateAccountInput.email;
-      }
+      removeNullProperty<UpdateAccount>(updateAccountInput);
 
       return await this.accountRepository.save({ ...account, ...updateAccountInput });
     }

@@ -1,9 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Account } from '../entity-gql-type/account';
-import { AccountService } from '../account.service';
-import { CreateAccount } from './dto/create-account.dto';
-import { UpdateAccount } from './dto/update-account.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { Account } from './account.type';
+import { AccountService } from './account.service';
+import { CreateAccount, UpdateAccount } from './account.dto';
 
 @Resolver(of => Account)
 export class AccountResolver {
@@ -32,12 +31,5 @@ export class AccountResolver {
     @Args('updateAccountInput') updateAccountInput: UpdateAccount
   ) {
     return await this.accountService.updateAccount(updateAccountInput);
-  }
-
-  @Mutation(returns => Account)
-  async deleteAccount(
-    @Args('accountId') accountId: string
-  ) {
-    return await this.accountService.deleteAccount(accountId);
   }
 }

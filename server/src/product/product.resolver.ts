@@ -1,8 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Product } from '../entity-gql-type/product';
-import { ProductService } from '../product.service';
-import { CreateProduct } from './dto/create-product.dto';
-import { UpdateProduct } from './dto/update-product.dto';
+import { Product } from './product.type';
+import { ProductService } from './product.service';
+import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver(of => Product)
@@ -60,8 +59,8 @@ export class ProductResolver {
 
   @Mutation(returns => Product)
   async deleteProduct(
-    @Args('productId') productId: string
+    @Args('deleteProductInput') deleteProductInput: DeleteProduct
   ) {
-    return await this.productService.deleteProduct(productId);
+    return await this.productService.deleteProduct(deleteProductInput);
   }
 }

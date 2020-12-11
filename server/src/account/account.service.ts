@@ -1,12 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Account } from './entity-gql-type/account';
-import { CreateAccount } from './gql/dto/create-account.dto';
-import { UpdateAccount } from './gql/dto/update-account.dto';
-import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
-import { removeNullProperty } from '../_utils/null-utilities';
-import { giveSaltAndHash } from '../_utils/account-utilities';
+import { Account } from './account.type';
+import { CreateAccount, UpdateAccount } from './account.dto';
+import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4.utilities';
+import { removeNullProperty } from '../_utils/null.utilities';
+import { giveSaltAndHash } from '../_utils/account.utilities';
 
 @Injectable()
 export class AccountService {
@@ -47,10 +46,5 @@ export class AccountService {
 
       return await this.accountRepository.save({ ...account, ...updateAccountInput });
     }
-  }
-
-  async deleteAccount(accountId: string): Promise<Account> {
-    // TODO: implemetation
-    return null;
   }
 }

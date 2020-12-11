@@ -21,7 +21,7 @@ export class UpdateAccount  {
   @IsOptional()
   password?: string;
 
-  @Field()
+  @Field({ nullable: true, defaultValue: null })
   @IsEmail()
   @IsOptional()
   email?: string;

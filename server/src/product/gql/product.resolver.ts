@@ -3,6 +3,7 @@ import { Product } from '../entity-gql-type/product';
 import { ProductService } from '../product.service';
 import { CreateProduct } from './dto/create-product.dto';
 import { UpdateProduct } from './dto/update-product.dto';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver(of => Product)
 export class ProductResolver {
@@ -41,6 +42,7 @@ export class ProductResolver {
   }
 
   @Mutation(returns => Product)
+  @UsePipes(ValidationPipe)
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProduct
   ) {
@@ -48,6 +50,7 @@ export class ProductResolver {
   }
 
   @Mutation(returns => Product)
+  @UsePipes(ValidationPipe)
   async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProduct
   ) {

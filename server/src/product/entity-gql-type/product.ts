@@ -2,7 +2,7 @@ import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColum
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from '../../_enums/product-category';
 import { nullOrValue } from '../../_utils/null-or-value';
-import { IsNotEmpty } from 'class-validator';
+import { MaxLength, MinLength } from 'class-validator';
 
 registerEnumType(ProductCategory, { name: 'ProductCategory' });
 
@@ -22,6 +22,7 @@ export class Product {
   beforeInsertActions() {
     // during create/insert, defaults only work on dto if passed,
     // not on defaults as defined if entity
+    this.avgReviewScore = this.avgReviewScore === null ? null : this.avgReviewScore;
     this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
     this.deleteReason = nullOrValue(this.deleteReason);
     this.deletedAt = nullOrValue(this.deletedAt);
@@ -42,9 +43,10 @@ export class Product {
   @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
   sellerId?: string; // TODO: temporary nullable
 
-  @IsNotEmpty() //TODO: not empty string validation does not work
   @Column()
   @Field()
+  @MaxLength(200, { message: `200 characters max length for Product Name.` })
+  @MinLength(3, { message: `3 characters minimum length for Product Name.` })
   name: string;
 
   @Column()

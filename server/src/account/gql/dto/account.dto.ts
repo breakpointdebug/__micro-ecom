@@ -8,7 +8,6 @@ export class BaseAccountDTO extends
       'accountType',
       'username',
       'password',
-      'salt',
       'email'
     ] as const) {
 }

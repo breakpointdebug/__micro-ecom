@@ -3,6 +3,7 @@ import { Account } from '../entity-gql-type/account';
 import { AccountService } from '../account.service';
 import { CreateAccount } from './dto/create-account.dto';
 import { UpdateAccount } from './dto/update-account.dto';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver(of => Account)
 export class AccountResolver {
@@ -17,6 +18,7 @@ export class AccountResolver {
   }
 
   @Mutation(returns => Account)
+  @UsePipes(ValidationPipe)
   async createAccount(
     @Args('createAccountInput') createAccountInput: CreateAccount
   ) {
@@ -25,6 +27,7 @@ export class AccountResolver {
 
   // TODO: remove accountType if not admin type.
   @Mutation(returns => Account)
+  @UsePipes(ValidationPipe)
   async updateAccount(
     @Args('updateAccountInput') updateAccountInput: UpdateAccount
   ) {

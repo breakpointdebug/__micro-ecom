@@ -1,12 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from './entity-gql-type/product';
-import { CreateProduct } from './gql/dto/create-product.dto';
-import { UpdateProduct } from './gql/dto/update-product.dto';
-import { DeleteProduct } from './gql/dto/delete-product.dto';
-import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4';
-import { removeNullProperty } from '../_utils/null-utilities';
+import { Product } from './product.type';
+import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
+import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4.utilities';
+import { removeNullProperty } from '../_utils/null.utilities';
 
 @Injectable()
 export class ProductService {

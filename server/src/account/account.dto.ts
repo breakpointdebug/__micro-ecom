@@ -1,6 +1,16 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { InputType, Field, PickType } from '@nestjs/graphql';
+import { AccountType } from 'src/_enums/account-type.enum';
+import { Account } from 'src/account/account.type';
 import { IsEmail, IsOptional, Length } from 'class-validator';
-import { AccountType } from 'src/_enums/account-type';
+
+@InputType()
+export class CreateAccount extends
+  PickType(Account, [
+    'accountType',
+    'username',
+    'password',
+    'email'
+  ] as const) {};
 
 @InputType()
 export class UpdateAccount  {

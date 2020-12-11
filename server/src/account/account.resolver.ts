@@ -1,9 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Account } from '../entity-gql-type/account';
-import { AccountService } from '../account.service';
-import { CreateAccount } from './dto/create-account.dto';
-import { UpdateAccount } from './dto/update-account.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { Account } from './account.type';
+import { AccountService } from './account.service';
+import { CreateAccount, UpdateAccount } from './account.dto';
 
 @Resolver(of => Account)
 export class AccountResolver {

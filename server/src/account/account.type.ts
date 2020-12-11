@@ -1,7 +1,7 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { AccountType } from 'src/_enums/account-type';
-import { nullOrValue } from '../../_utils/null-utilities';
+import { AccountType } from 'src/_enums/account-type.enum';
+import { nullOrValue } from '../_utils/null.utilities';
 import { IsEmail, Length } from 'class-validator';
 
 registerEnumType(AccountType, { name: 'AccountType' });

@@ -1,9 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Product } from '../entity-gql-type/product';
-import { ProductService } from '../product.service';
-import { CreateProduct } from './dto/create-product.dto';
-import { UpdateProduct } from './dto/update-product.dto';
-import { DeleteProduct } from './dto/delete-product.dto';
+import { Product } from './product.type';
+import { ProductService } from './product.service';
+import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver(of => Product)

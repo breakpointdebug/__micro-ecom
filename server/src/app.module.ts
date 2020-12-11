@@ -11,8 +11,8 @@ import { AccountModule } from './account/account.module';
 
 import * as config from 'config';
 
-import { Product } from './product/entity-gql-type/product';
-import { Account } from './account/entity-gql-type/account';
+import { Product } from './product/product.type';
+import { Account } from './account/account.type';
 
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');

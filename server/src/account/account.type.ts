@@ -55,6 +55,10 @@ export class Account {
   @Field({ nullable: true, defaultValue: null })
   verifiedAt?: Date;
 
+  @Column()
+  @Field({ nullable: false, defaultValue: "" })
+  verificationHash: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   @Field()
   createdAt: Date;
@@ -62,4 +66,14 @@ export class Account {
   @UpdateDateColumn({ type: 'timestamp' })
   @Field()
   lastUpdatedAt: Date;
+}
+
+@ObjectType('AccountVerificationResponse')
+export class AccountVerificationResponse {
+
+  @Field()
+  isAccepted: boolean
+
+  @Field()
+  resultMessage: string
 }

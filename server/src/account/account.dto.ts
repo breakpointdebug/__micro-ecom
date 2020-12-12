@@ -10,7 +10,7 @@ export class CreateAccount extends
     'username',
     'password',
     'email'
-  ] as const) {};
+  ] as const) {}
 
 @InputType()
 export class UpdateAccount  {
@@ -35,4 +35,4 @@ export class UpdateAccount  {
   @IsEmail()
   @IsOptional()
   email?: string;
-};
+}

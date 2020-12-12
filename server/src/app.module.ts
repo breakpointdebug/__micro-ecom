@@ -35,7 +35,7 @@ const gqlConf = config.get('config.gql');
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       path: gqlConf.url,
-      context: ({ req }) => ({ req })
+      context: ({ req }) => ({ req }),
     }),
     ProductModule,
     AccountModule

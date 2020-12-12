@@ -4,41 +4,38 @@ import { ProductService } from './product.service';
 import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
+import { isPasswordCorrect } from '../_utils/account.utilities';
+
+
 @Resolver(of => Product)
 export class ProductResolver {
 
-  constructor(private productService: ProductService) {}
-
-  // TODO: remove this gql endpoint
-  @Query(returns => String)
-  async test() {
-    return "done, you can test quick code here upon running";
-  }
+  constructor(private productSvc: ProductService) {}
 
   @Query(returns => [Product])
   async getAllActiveProducts() {
-    return await this.productService.getAllActiveProducts();
+    return await this.productSvc.getAllActiveProducts();
   }
 
   @Query(returns => Product)
   async getProductById(
     @Args('productId') productId: string
   ) {
-    return await this.productService.getProductById(productId);
+    return await this.productSvc.getProductById(productId);
   }
 
   @Query(returns => [Product])
   async getAllProductsBySellerId(
     @Args('sellerId') sellerId: string
   ) {
-    return await this.productService.getAllProductsBySellerId(sellerId);
+    return await this.productSvc.getAllProductsBySellerId(sellerId);
   }
 
   @Query(returns => [Product])
   async getProductsByName(
     @Args('name') name: string
   ) {
-    return await this.productService.getProductsByName(name);
+    return await this.productSvc.getProductsByName(name);
   }
 
   @Mutation(returns => Product)
@@ -46,7 +43,7 @@ export class ProductResolver {
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProduct
   ) {
-    return await this.productService.createProduct(createProductInput);
+    return await this.productSvc.createProduct(createProductInput);
   }
 
   @Mutation(returns => Product)
@@ -54,13 +51,13 @@ export class ProductResolver {
   async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProduct
   ) {
-    return await this.productService.updateProduct(updateProductInput);
+    return await this.productSvc.updateProduct(updateProductInput);
   }
 
   @Mutation(returns => Product)
   async deleteProduct(
     @Args('deleteProductInput') deleteProductInput: DeleteProduct
   ) {
-    return await this.productService.deleteProduct(deleteProductInput);
+    return await this.productSvc.deleteProduct(deleteProductInput);
   }
 }

@@ -5,8 +5,8 @@ import { Account, AccountVerificationResponse } from './account.type';
 import { CreateAccount, UpdateAccount } from './account.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4.utilities';
 import { removeNullProperty } from '../_utils/null.utilities';
-import { giveSaltAndSaltedPassword } from '../_utils/account.utilities';
-import { isPasswordCorrect, createJwtToken } from '../_utils/account.utilities';
+import { giveSaltAndSaltedPassword } from '../auth/auth.utilities';
+import { isPasswordCorrect, createJwtToken } from '../auth/auth.utilities';
 
 @Injectable()
 export class AccountService {
@@ -17,21 +17,6 @@ export class AccountService {
     const account = await this.accountRepo.findOne({ accountId: format_uuid_v4(accountId) });
     if (!account) throw new NotFoundException(`Account "${accountId}" not found`);
     return account;
-  }
-
-  async getAccountByUsername(username: string): Promise<Account> {
-    const account = await this.accountRepo.findOne({ username });
-    if (!account) throw new NotFoundException(`Account not found`);
-    return account;
-  }
-
-  async login(username: string, password: string): Promise<String> {
-    const account = await this.getAccountByUsername(username);
-    if (account && isPasswordCorrect(password, account.salt, account.password)) {
-      return await createJwtToken(account);
-    } else {
-      throw new NotFoundException(`Invalid account credentials`);
-    }
   }
 
   // TODO: no spaces for username

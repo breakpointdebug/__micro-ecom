@@ -20,18 +20,3 @@ export const isPasswordCorrect = async (providedPassword: string, existingSalt: 
 export const createJwtToken = async ({ accountId, email }: Account) => {
   return jwt.sign({ accountId, email }, jwtConf.secret);
 }
-
-// create a hash to be sent via email,
-export const createVerificationLink = async () => {
-
-}
-
-export const sendVerificationLink = async () => {
-
-}
-
-// when visited by the user,
-// then will activate their account and discard that hash (link)
-export const verifyAccount = async () => {
-  // note: input sanitation with encodeuri
-}

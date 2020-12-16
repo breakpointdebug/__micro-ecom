@@ -3,7 +3,9 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Account, AccountVerificationResponse } from './account.type';
 import { AccountService } from './account.service';
 import { CreateAccount, UpdateAccount } from './account.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { GetUser } from '../auth/get-user.decorator';
+import { AuthUser } from '../auth/auth.type';
 
 @Resolver(of => Account)
 export class AccountResolver {
@@ -23,14 +25,6 @@ export class AccountResolver {
     return await this.accountSvc.getAccountById(accountId);
   }
 
-  @Mutation(returns => String)
-  async login(
-    @Args('username') username: string,
-    @Args('password') password: string
-  ) {
-    return await this.accountSvc.login(username, password);
-  }
-
   @Mutation(returns => Account)
   @UsePipes(ValidationPipe)
   async createAccount(
@@ -45,7 +39,8 @@ export class AccountResolver {
   @UseGuards(new AuthGuard())
   @UsePipes(ValidationPipe)
   async updateAccount(
-    @Args('updateAccountInput') updateAccountInput: UpdateAccount
+    @Args('updateAccountInput') updateAccountInput: UpdateAccount,
+    @GetUser() user: AuthUser
   ) {
     return await this.accountSvc.updateAccount(updateAccountInput);
   }

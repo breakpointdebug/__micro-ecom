@@ -6,20 +6,17 @@ import * as config from 'config';
 
 const jwtConf = config.get('config.jwt');
 
-// TODO: https://stackoverflow.com/questions/55269777/nestjs-get-current-user-in-graphql-resolver-authenticated-with-jwt
-// TODO: https://blog.logrocket.com/complete-guide-to-graphql-playground/
-
 @Injectable()
 export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context).getContext();
 
-    if (!ctx.headers.Authorization) {
+    if (!ctx.req.headers.authorization) {
       return false;
     }
 
-    ctx.user = await this.validateToken(ctx.headers.authorization);
+    ctx.user = await this.validateToken(ctx.req.headers.authorization);
 
     return true;
   }

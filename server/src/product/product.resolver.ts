@@ -4,9 +4,6 @@ import { ProductService } from './product.service';
 import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
-import { isPasswordCorrect } from '../_utils/account.utilities';
-
-
 @Resolver(of => Product)
 export class ProductResolver {
 

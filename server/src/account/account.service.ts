@@ -1,31 +1,32 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Account } from './account.type';
+import { Account, AccountVerificationResponse } from './account.type';
 import { CreateAccount, UpdateAccount } from './account.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4.utilities';
 import { removeNullProperty } from '../_utils/null.utilities';
-import { giveSaltAndHash } from '../_utils/account.utilities';
+import { giveSaltAndSaltedPassword } from '../auth/auth.utilities';
 
 @Injectable()
 export class AccountService {
 
-  constructor(@InjectRepository(Account) private accountRepository: Repository<Account>) {}
+  constructor(@InjectRepository(Account) private accountRepo: Repository<Account>) {}
 
   async getAccountById(accountId: string): Promise<Account> {
-    const account = await this.accountRepository.findOne({ accountId: format_uuid_v4(accountId) });
+    const account = await this.accountRepo.findOne({ accountId: format_uuid_v4(accountId) });
     if (!account) throw new NotFoundException(`Account "${accountId}" not found`);
     return account;
   }
 
+  // TODO: no spaces for username
   async createAccount(createAccountInput: CreateAccount): Promise<Account> {
-    const account = this.accountRepository.create({ accountId: create_uuid_v4(), ...createAccountInput });
+    const account = this.accountRepo.create({ accountId: create_uuid_v4(), ...createAccountInput });
 
-    const { salt, saltedPassword } = await giveSaltAndHash(account.password);
+    const { salt, saltedPassword } = await giveSaltAndSaltedPassword(account.password);
     account.salt = salt;
     account.password = saltedPassword;
 
-    return await this.accountRepository.save(account);
+    return await this.accountRepo.save(account);
   }
 
   async updateAccount(updateAccountInput: UpdateAccount): Promise<Account> {
@@ -37,14 +38,18 @@ export class AccountService {
       delete updateAccountInput.accountId;
 
       if (updateAccountInput.password) {
-        const { salt, saltedPassword } = await giveSaltAndHash(account.password);
+        const { salt, saltedPassword } = await giveSaltAndSaltedPassword(account.password);
         account.salt = salt;
         account.password = saltedPassword;
       }
 
       removeNullProperty<UpdateAccount>(updateAccountInput);
 
-      return await this.accountRepository.save({ ...account, ...updateAccountInput });
+      return await this.accountRepo.save({ ...account, ...updateAccountInput });
     }
+  }
+
+  async verifyAccount(verificationhash: string): Promise<AccountVerificationResponse> {
+    return null;
   }
 }

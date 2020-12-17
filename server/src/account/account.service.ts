@@ -6,7 +6,6 @@ import { CreateAccount, UpdateAccount } from './account.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4.utilities';
 import { removeNullProperty } from '../_utils/null.utilities';
 import { giveSaltAndSaltedPassword } from '../auth/auth.utilities';
-import { isPasswordCorrect, createJwtToken } from '../auth/auth.utilities';
 
 @Injectable()
 export class AccountService {
@@ -49,8 +48,6 @@ export class AccountService {
       return await this.accountRepo.save({ ...account, ...updateAccountInput });
     }
   }
-
-
 
   async verifyAccount(verificationhash: string): Promise<AccountVerificationResponse> {
     return null;

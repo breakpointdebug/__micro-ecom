@@ -7,7 +7,7 @@ import { isPasswordCorrect, createJwtToken } from '../auth/auth.utilities';
 @Injectable()
 export class AuthService {
 
-  constructor(@InjectRepository(Account) private accountRepo: Repository<Account> ) { }
+  constructor(@InjectRepository(Account) private accountRepo: Repository<Account> ) {}
 
   async getAccountByUsername(username: string): Promise<Account> {
     const account = await this.accountRepo.findOne({ username });
@@ -18,7 +18,7 @@ export class AuthService {
   async login(username: string, password: string): Promise<String> {
     const account = await this.getAccountByUsername(username);
     if (account && isPasswordCorrect(password, account.salt, account.password)) {
-      return await createJwtToken(account);
+      return await createJwtToken(account.accountId, account.accountType);
     } else {
       throw new NotFoundException(`Invalid account credentials`);
     }

@@ -1,7 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-export const GetUser = createParamDecorator((data, context: ExecutionContext)  => {
+// used to know who will update a specific document
+export const GetAuthUser = createParamDecorator((data, context: ExecutionContext)  => {
   const ctx = GqlExecutionContext.create(context).getContext();
   return ctx.user;
 });

@@ -1,8 +1,7 @@
-import { Account } from '../account/account.type';
-
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
+import { AccountType } from 'src/_enums/account-type.enum';
 
 const jwtConf = config.get('config.jwt');
 
@@ -17,6 +16,6 @@ export const isPasswordCorrect = async (providedPassword: string, existingSalt: 
   return calculated === saltedPassword;
 }
 
-export const createJwtToken = async ({ accountId, email }: Account) => {
-  return jwt.sign({ accountId, email }, jwtConf.secret);
+export const createJwtToken = async (accountId: string, accountType: AccountType) => {
+  return jwt.sign({ accountId, accountType }, jwtConf.secret);
 }

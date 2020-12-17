@@ -4,7 +4,7 @@ import { Account, AccountVerificationResponse } from './account.type';
 import { AccountService } from './account.service';
 import { CreateAccount, UpdateAccount } from './account.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { GetUser } from '../auth/get-user.decorator';
+import { GetAuthUser } from '../auth/get-auth-user.decorator';
 import { AuthUser } from '../auth/auth.type';
 
 @Resolver(of => Account)
@@ -14,7 +14,7 @@ export class AccountResolver {
 
   // TODO: remove this gql endpoint
   @Query(returns => String)
-  async test() {
+  async test_account() {
     return "done, you can test quick code here upon running";
   }
 
@@ -33,14 +33,12 @@ export class AccountResolver {
     return await this.accountSvc.createAccount(createAccountInput);
   }
 
-  // TODO: remove accountType if not admin type.
-
   @Mutation(returns => Account)
-  @UseGuards(new AuthGuard())
+  @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
   async updateAccount(
     @Args('updateAccountInput') updateAccountInput: UpdateAccount,
-    @GetUser() user: AuthUser
+    @GetAuthUser() user: AuthUser
   ) {
     return await this.accountSvc.updateAccount(updateAccountInput);
   }

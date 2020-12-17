@@ -1,13 +1,10 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { AuthUser } from '../auth/auth.type';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
-
-import { GetAuthUser } from './get-auth-user.decorator';
-import { DefineRoles } from './roles.decorator'
 import { AccountType } from '../account/account.enum';
-import { RolesGuard } from './roles.guard';
+import { UseGuards } from '@nestjs/common';
+import { AuthorizationGuard, RolesGuard } from './auth.guard';
+import { GetAuthUser, DefineRoles } from './auth.decorator';
 
 @Resolver(of => AuthUser)
 export class AuthResolver {
@@ -31,7 +28,7 @@ export class AuthResolver {
   */
 
   @Query(returns => Boolean)
-  @UseGuards(new AuthGuard())
+  @UseGuards(AuthorizationGuard)
   async me(
     @GetAuthUser() user: AuthUser
   ) {
@@ -40,8 +37,8 @@ export class AuthResolver {
   }
 
   @Query(returns => Boolean)
-  @DefineRoles(AccountType.ADMIN)
-  @UseGuards(AuthGuard, RolesGuard)
+  @DefineRoles(AccountType.ADMIN, AccountType.BUYER_AND_SELLER)
+  @UseGuards(AuthorizationGuard, RolesGuard)
   async me_admin(
     @GetAuthUser() user: AuthUser
   ) {

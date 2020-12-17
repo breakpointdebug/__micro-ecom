@@ -1,6 +1,6 @@
 import { Field, InputType, PickType } from '@nestjs/graphql';
 import { IsOptional, Length } from 'class-validator';
-import { ProductCategory } from 'src/_enums/product-category.enum';
+import { ProductCategory } from './product.enum';
 import { Product } from './product.type';
 
 @InputType()

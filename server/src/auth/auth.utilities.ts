@@ -1,7 +1,8 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
-import { AccountType } from 'src/_enums/account-type.enum';
+
+import { AccountType } from '../account/account.enum';
 
 const jwtConf = config.get('config.jwt');
 

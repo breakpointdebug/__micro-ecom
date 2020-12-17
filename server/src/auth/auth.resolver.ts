@@ -6,7 +6,7 @@ import { AuthGuard } from './auth.guard';
 
 import { GetAuthUser } from './get-auth-user.decorator';
 import { DefineRoles } from './roles.decorator'
-import { AccountType } from 'src/_enums/account-type.enum';
+import { AccountType } from '../account/account.enum';
 import { RolesGuard } from './roles.guard';
 
 @Resolver(of => AuthUser)

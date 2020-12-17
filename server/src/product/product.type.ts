@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { ProductCategory } from '../_enums/product-category.enum';
+import { ProductCategory } from './product.enum';
 import { nullOrValue } from '../_utils/null.utilities';
 import { IsPositive, Length } from 'class-validator';
 

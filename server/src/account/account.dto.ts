@@ -1,5 +1,5 @@
 import { InputType, Field, PickType } from '@nestjs/graphql';
-import { AccountType } from 'src/_enums/account-type.enum';
+import { AccountType } from './account.enum';
 import { Account } from 'src/account/account.type';
 import { IsEmail, IsOptional, Length } from 'class-validator';
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from '../account/account.type';
@@ -11,7 +11,7 @@ export class AuthService {
 
   async getAccountByUsername(username: string): Promise<Account> {
     const account = await this.accountRepo.findOne({ username });
-    if (!account) throw new NotFoundException(`Account not found`);
+    if (!account) throw new HttpException('Invalid account credentials', HttpStatus.UNAUTHORIZED);
     return account;
   }
 
@@ -20,7 +20,7 @@ export class AuthService {
     if (account && isPasswordCorrect(password, account.salt, account.password)) {
       return await createJwtToken(account.accountId, account.accountType);
     } else {
-      throw new NotFoundException(`Invalid account credentials`);
+      throw new HttpException('Invalid account credentials', HttpStatus.UNAUTHORIZED);
     }
   }
 }

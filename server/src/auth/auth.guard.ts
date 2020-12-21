@@ -27,14 +27,10 @@ export class AuthorizationGuard implements CanActivate {
     if (auth.split(' ')[0] !== 'Bearer') {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
-
-    const token = auth.split(' ')[1];
-
     try {
-      return jwt.verify(token, jwtConf.secret);
-    } catch (err) {
-      const message = 'Token error: ' + (err.message || err.name);
-      throw new HttpException(message, HttpStatus.UNAUTHORIZED);
+      return jwt.verify(auth.split(' ')[1], jwtConf.secret);
+    } catch (e) {
+      throw new HttpException(`Token error: ${e.message || e.name}`, HttpStatus.UNAUTHORIZED);
     }
   }
 }

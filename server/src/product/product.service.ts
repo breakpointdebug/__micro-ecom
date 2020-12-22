@@ -11,6 +11,7 @@ export class ProductService {
 
   constructor(@InjectRepository(Product) private productRepo: Repository<Product>) {}
 
+  //#region Query
   async getAllActiveProducts(): Promise<Product[]> {
     const products = await this.productRepo.find({ isDeleted: false });
     if (!products) throw new NotFoundException(`No active products retrieved`);
@@ -34,7 +35,9 @@ export class ProductService {
     if (!products) throw new NotFoundException(`No products exist containing name: ${name}`);
     return products;
   }
+  //#endregion
 
+  //#region Mutation
   async createProduct(createProductInput: CreateProduct): Promise<Product> {
     const product = this.productRepo.create({ productId: create_uuid_v4(), ...createProductInput });
     return await this.productRepo.save(product);
@@ -64,4 +67,5 @@ export class ProductService {
       return await this.productRepo.save({ ...product, isDeleted: true, deleteReason, deletedAt: new Date() });
     }
   }
+  //#endregion
 }

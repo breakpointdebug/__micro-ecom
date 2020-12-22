@@ -1,0 +1,1 @@
+export const trimAndLowerCase = (value: string): string => value.trim().replace(/\s+/g, '').toLowerCase();

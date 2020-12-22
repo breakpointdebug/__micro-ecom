@@ -12,13 +12,15 @@ export class AccountService {
 
   constructor(@InjectRepository(Account) private accountRepo: Repository<Account>) {}
 
+  //#region Query
   async getAccountById(accountId: string): Promise<Account> {
     const account = await this.accountRepo.findOne({ accountId: format_uuid_v4(accountId) });
     if (!account) throw new NotFoundException(`Account "${accountId}" not found`);
     return account;
   }
+  //#endregion
 
-  // TODO: no spaces for username
+  //#region Mutation
   async createAccount(createAccountInput: CreateAccount): Promise<Account> {
     const account = this.accountRepo.create({ accountId: create_uuid_v4(), ...createAccountInput });
 
@@ -52,4 +54,5 @@ export class AccountService {
   async verifyAccount(verificationhash: string): Promise<AccountVerificationResponse> {
     return null;
   }
+  //#endregion
 }

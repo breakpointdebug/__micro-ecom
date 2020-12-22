@@ -27,7 +27,7 @@ export class AccountResolver {
   }
 
   @Mutation(returns => Account)
-  @UsePipes(ValidationPipe)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async createAccount(
     @Args('createAccountInput') createAccountInput: CreateAccount
   ) {
@@ -36,7 +36,7 @@ export class AccountResolver {
 
   @Mutation(returns => Account)
   @UseGuards(AuthorizationGuard)
-  @UsePipes(ValidationPipe)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async updateAccount(
     @Args('updateAccountInput') updateAccountInput: UpdateAccount,
     @GetAuthUser() user: AuthUser

@@ -9,6 +9,7 @@ export class AuthService {
 
   constructor(@InjectRepository(Account) private accountRepo: Repository<Account> ) {}
 
+  //#region Query
   async getAccountByUsername(username: string): Promise<Account> {
     const account = await this.accountRepo.findOne({ username });
     if (!account) throw new HttpException('Invalid account credentials', HttpStatus.UNAUTHORIZED);
@@ -23,4 +24,8 @@ export class AuthService {
       throw new HttpException('Invalid account credentials', HttpStatus.UNAUTHORIZED);
     }
   }
+  //#endregion
+
+  //#region Mutation
+  //#endregion
 }

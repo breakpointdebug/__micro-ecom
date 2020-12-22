@@ -14,6 +14,7 @@ export class Account {
   @BeforeInsert()
   beforeInsertActions() {
     this.isVerified = this.isVerified === true ? true : false;
+    this.verificationHash = nullOrValue(this.verificationHash);
     this.verifiedAt = nullOrValue(this.verifiedAt);
   }
 
@@ -56,8 +57,8 @@ export class Account {
   verifiedAt?: Date;
 
   @Column()
-  @Field({ nullable: false, defaultValue: "" })
-  verificationHash: string;
+  @Field({ nullable: true, defaultValue: null })
+  verificationHash?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   @Field()

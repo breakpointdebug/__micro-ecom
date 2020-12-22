@@ -28,7 +28,11 @@ export class AccountService {
     account.salt = salt;
     account.password = saltedPassword;
 
-    return await this.accountRepo.save(account);
+    const accountCreated = await this.accountRepo.save(account)
+
+    // proceed with sending for verification (mailer)
+
+    return accountCreated;
   }
 
   async updateAccount(updateAccountInput: UpdateAccount): Promise<Account> {
@@ -52,6 +56,8 @@ export class AccountService {
   }
 
   async verifyAccount(verificationhash: string): Promise<AccountVerificationResponse> {
+    // if already verified, do not do another verification logic
+    // on each resend of verification hash, overwrite the already existing (to invalidate the previous ones)
     return null;
   }
   //#endregion

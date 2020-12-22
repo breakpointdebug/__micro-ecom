@@ -14,6 +14,7 @@ import * as config from 'config';
 
 import { Product } from './product/product.type';
 import { Account } from './account/account.type';
+import { MailerModule } from './mailer/mailer.module';
 
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');
@@ -38,7 +39,8 @@ const gqlConf = config.get('config.gql');
     }),
     ProductModule,
     AccountModule,
-    AuthModule
+    AuthModule,
+    MailerModule
   ]
 })
 export class AppModule {}

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { MongoHighlighter } from '@mikro-orm/mongo-highlighter';
 
 import { ProductModule } from './product/product.module';
 import { AccountModule } from './account/account.module';
@@ -19,22 +20,39 @@ import { MailerModule } from './mailer/mailer.module';
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');
 
+// TODO: SAFE auto-migrations
+// https://mikro-orm.io/docs/migrations
+// TODO: staging setup
 @Module({
   imports: [
     MikroOrmModule.forRoot({
-      entities: [ Product, Account ],
+      type: dbConf.type,
       dbName: dbConf.name,
-      type: dbConf.type
+      clientUrl: dbConf.url_remote,
+      entities: [ Product ],
+      highlighter: new MongoHighlighter(),  // temporary
+      debug: true,  // temporary
+      // migrations: {
+      //   tableName: dbConf.migrations,
+      //   path: './migrations',
+      //   pattern: /^[\w-]+\d+\.ts$/,
+      //   transactional: true,
+      //   disableForeignKeys: true,
+      //   allOrNothing: true,
+      //   dropTables: true,
+      //   safe: false,
+      //   emit: 'ts'
+      // }
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       path: gqlConf.url,
       context: ({ req }) => ({ req }),
     }),
-    ProductModule,
-    AccountModule,
-    AuthModule,
-    MailerModule
+    ProductModule //,
+    // AccountModule,
+    // AuthModule,
+    // MailerModule
   ]
 })
 export class AppModule {}

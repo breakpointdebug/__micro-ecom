@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.type';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ProductResolver } from './product.resolver';
 import { ProductService } from './product.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product])
+    MikroOrmModule.forFeature([Product])
   ],
   providers: [
     ProductService,

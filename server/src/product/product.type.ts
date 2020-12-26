@@ -1,87 +1,76 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { DateType, Entity, Enum, PrimaryKey, Property, SerializedPrimaryKey, Unique } from '@mikro-orm/core';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from './product.enum';
-import { nullOrValue } from '../_utils/null.utilities';
 import { IsPositive, Length } from 'class-validator';
+import { ObjectID } from 'mongodb';
 
 registerEnumType(ProductCategory, { name: 'ProductCategory' });
 
 /*
--- typeorm
+-- @mikro-orm/core
 -- @nestjs/graphql
 -- class-validator
 */
 
-@Entity('products')
+@Entity({ tableName: 'products' })
 @InputType('ProductInput')
 @ObjectType('ProductType')
 export class Product {
 
-  // https://github.com/typeorm/typeorm/blob/master/docs/listeners-and-subscribers.md#beforeinsert
-  @BeforeInsert()
-  beforeInsertActions() {
-    // during create/insert, defaults only work on dto if passed,
-    // not on defaults as defined if entity
-    this.avgReviewScore = this.avgReviewScore === null ? null : this.avgReviewScore;
-    // this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
-    this.deleteReason = nullOrValue(this.deleteReason);
-    this.deletedAt = nullOrValue(this.deletedAt);
-  }
-
-  @ObjectIdColumn()
+  @PrimaryKey()
   _productId: ObjectID;
 
-  @PrimaryColumn()
+  @SerializedPrimaryKey()
   @Field(type => ID)
   productId: string;
 
-  @Column()
+  @Enum(() => ProductCategory)
   @Field(type => ProductCategory)
   productCategory: ProductCategory;
 
-  @Column()
-  @Field({ nullable: true, defaultValue: null }) // TODO: temporary nullable
-  sellerId?: string; // TODO: temporary nullable
+  @Property({ nullable: true })
+  @Field({ nullable: true }) // TODO: temporary nullable
+  sellerId?: string; // TODO: temporary nullable, TODO: relationships based on mikro-orm
 
-  @Column()
+  @Property({ unique: true })
   @Field()
   @Length(3, 200, { message: `Product Name should be between 3 and 200 characters.` })
   name: string;
 
-  @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Property()
+  @Field({ nullable: true, defaultValue: null }) // we define default value if used on dto if nullable
   sku?: string;
 
-  @Column()
+  @Property()
   @Field({ nullable: true, defaultValue: null })
   image?: string;
 
-  @Column()
+  @Property()
   @Field({ nullable: true, defaultValue: null })
   description?: string;
 
-  @Column()
+  @Property({ default: 1 })
   @Field({ defaultValue: 1 })
   @IsPositive({ message: `Selling Price needs to be greater than zero.`})
   sellingPrice: number;
 
-  @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Property()
+  @Field({ nullable: true })
   avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
 
-  @Column()
-  @Field({ nullable: true, defaultValue: null })
+  @Property()
+  @Field({ nullable: true })
   deleteReason?: string;
 
-  @Column({ type: 'timestamp' })
-  @Field({ nullable: true, defaultValue: null })
+  @Property({ type: DateType })
+  @Field({ nullable: true })
   deletedAt?: Date;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @Property({ type: DateType, onCreate: () => new Date() })
   @Field()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @Property({ type: DateType, onCreate: () => new Date(), onUpdate: () => new Date() })
   @Field()
   lastUpdatedAt: Date;
 }

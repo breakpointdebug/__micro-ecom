@@ -23,7 +23,7 @@ export class Product {
     // during create/insert, defaults only work on dto if passed,
     // not on defaults as defined if entity
     this.avgReviewScore = this.avgReviewScore === null ? null : this.avgReviewScore;
-    this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
+    // this.isDeleted = this.isDeleted === true ? true : false; // false, undefined, or null then, false
     this.deleteReason = nullOrValue(this.deleteReason);
     this.deletedAt = nullOrValue(this.deletedAt);
   }
@@ -68,10 +68,6 @@ export class Product {
   @Column()
   @Field({ nullable: true, defaultValue: null })
   avgReviewScore?: number;   // TODO: auto calculate average rating after new reviews left for this product.
-
-  @Column()
-  @Field()
-  isDeleted: boolean;
 
   @Column()
   @Field({ nullable: true, defaultValue: null })

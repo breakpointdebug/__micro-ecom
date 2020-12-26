@@ -13,9 +13,9 @@ export class Account {
 
   @BeforeInsert()
   beforeInsertActions() {
-    this.isVerified = this.isVerified === true ? true : false;
-    this.verificationHash = nullOrValue(this.verificationHash);
     this.verifiedAt = nullOrValue(this.verifiedAt);
+    this.verificationHash = nullOrValue(this.verificationHash);
+    this.forgotAccountHash = nullOrValue(this.forgotAccountHash);
   }
 
   @ObjectIdColumn()
@@ -48,17 +48,17 @@ export class Account {
   @IsEmail()
   email: string;
 
-  @Column()
-  @Field()
-  isVerified: boolean;
-
   @Column({ type: 'timestamp' })
   @Field({ nullable: true, defaultValue: null })
   verifiedAt?: Date;
 
   @Column()
   @Field({ nullable: true, defaultValue: null })
-  verificationHash?: string;
+  verificationHash?: string; // expiring hash, 10minutes, if verified then delete, else check validity
+
+  @Column()
+  @Field({ nullable: true, defaultValue: null })
+  forgotAccountHash?: string; // expiring hash, 10minutes, if verified then delete, else check validity
 
   @CreateDateColumn({ type: 'timestamp' })
   @Field()

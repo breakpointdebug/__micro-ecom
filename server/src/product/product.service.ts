@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Not, IsNull } from 'typeorm';
 import { Product } from './product.type';
 import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
 import { create_uuid_v4, format_uuid_v4 } from '../_utils/uuid-v4.utilities';
@@ -13,7 +13,7 @@ export class ProductService {
 
   //#region Query
   async getAllActiveProducts(): Promise<Product[]> {
-    const products = await this.productRepo.find({ isDeleted: false });
+    const products = await this.productRepo.find();
     if (!products) throw new NotFoundException(`No active products retrieved`);
     return products;
   }

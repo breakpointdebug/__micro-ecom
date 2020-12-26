@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 import { ProductModule } from './product/product.module';
 import { AccountModule } from './account/account.module';
@@ -21,16 +21,10 @@ const gqlConf = config.get('config.gql');
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: dbConf.type,
-      url: dbConf.url_remote,
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      synchronize: true,
-      entities: [
-        Product,
-        Account
-      ]
+    MikroOrmModule.forRoot({
+      entities: [ Product, Account ],
+      dbName: dbConf.name,
+      type: dbConf.type
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,

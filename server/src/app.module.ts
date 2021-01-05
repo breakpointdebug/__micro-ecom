@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { MongoHighlighter } from '@mikro-orm/mongo-highlighter';
 
 import { ProductModule } from './product/product.module';
 import { AccountModule } from './account/account.module';
@@ -12,33 +13,50 @@ import { AuthModule } from './auth/auth.module';
 
 import * as config from 'config';
 
-import { Product } from './product/product.type';
+import { Products } from './product/product.entity';
 import { Account } from './account/account.type';
+import { MailerModule } from './mailer/mailer.module';
+import { EntityManager } from '@mikro-orm/core';
 
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');
 
+
+
+// TODO: SAFE auto-migrations
+// https://mikro-orm.io/docs/migrations
+// TODO: staging setup
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
+    MikroOrmModule.forRoot({
       type: dbConf.type,
-      url: dbConf.url_remote,
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      synchronize: true,
-      entities: [
-        Product,
-        Account
-      ]
+      dbName: dbConf.name,
+      clientUrl: dbConf.url_remote,
+      autoLoadEntities: true,
+      highlighter: new MongoHighlighter(),  // temporary
+      // debug: true,  // temporary
+
+      // migrations: {
+      //   tableName: dbConf.migrations,
+      //   path: './migrations',
+      //   pattern: /^[\w-]+\d+\.ts$/,
+      //   transactional: true,
+      //   disableForeignKeys: true,
+      //   allOrNothing: true,
+      //   dropTables: true,
+      //   safe: false,
+      //   emit: 'ts'
+      // }
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       path: gqlConf.url,
       context: ({ req }) => ({ req }),
     }),
-    ProductModule,
-    AccountModule,
-    AuthModule
+    ProductModule //,
+    // AccountModule,
+    // AuthModule,
+    // MailerModule
   ]
 })
-export class AppModule {}
+export class AppModule { }

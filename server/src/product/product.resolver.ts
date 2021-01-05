@@ -1,41 +1,41 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Product } from './product.type';
+import { Products } from './product.entity';
 import { ProductService } from './product.service';
 import { CreateProduct, UpdateProduct, DeleteProduct } from './product.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
-@Resolver(of => Product)
+@Resolver(of => Products)
 export class ProductResolver {
 
-  constructor(private productSvc: ProductService) {}
+  constructor(private productSvc: ProductService) { }
 
-  @Query(returns => [Product])
+  @Query(returns => [Products])
   async getAllActiveProducts() {
     return await this.productSvc.getAllActiveProducts();
   }
 
-  @Query(returns => Product)
+  @Query(returns => Products)
   async getProductById(
     @Args('productId') productId: string
   ) {
     return await this.productSvc.getProductById(productId);
   }
 
-  @Query(returns => [Product])
+  @Query(returns => [Products])
   async getAllProductsBySellerId(
     @Args('sellerId') sellerId: string
   ) {
     return await this.productSvc.getAllProductsBySellerId(sellerId);
   }
 
-  @Query(returns => [Product])
+  @Query(returns => [Products])
   async getProductsByName(
     @Args('name') name: string
   ) {
     return await this.productSvc.getProductsByName(name);
   }
 
-  @Mutation(returns => Product)
+  @Mutation(returns => Products)
   @UsePipes(ValidationPipe)
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProduct
@@ -43,7 +43,7 @@ export class ProductResolver {
     return await this.productSvc.createProduct(createProductInput);
   }
 
-  @Mutation(returns => Product)
+  @Mutation(returns => Products)
   @UsePipes(ValidationPipe)
   async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProduct
@@ -51,7 +51,7 @@ export class ProductResolver {
     return await this.productSvc.updateProduct(updateProductInput);
   }
 
-  @Mutation(returns => Product)
+  @Mutation(returns => Products)
   async deleteProduct(
     @Args('deleteProductInput') deleteProductInput: DeleteProduct
   ) {

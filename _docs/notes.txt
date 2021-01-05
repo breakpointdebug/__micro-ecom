@@ -21,3 +21,8 @@ at the time of this writing, nestjs is stuck at typescript@4.0.5
 make sure you point to Typescript 4.1.2 at vscode so that tsconfig.json does not complain
 
 problem at typeorm@0.2.29, cannot connect to mongodb atlas, downgraded to typeorm@0.2.28
+
+
+check for unused dependencies:
+>>> npm i -g depcheck typescript
+>>> depcheck "\\...\\..."

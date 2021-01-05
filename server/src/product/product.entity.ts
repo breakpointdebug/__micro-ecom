@@ -1,8 +1,10 @@
-import { DateType, Entity, Enum, PrimaryKey, Property, SerializedPrimaryKey, Unique } from '@mikro-orm/core';
+import { DateType, Entity, EntityRepositoryType, Enum, PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductCategory } from './product.enum';
 import { IsPositive, Length } from 'class-validator';
 import { ObjectID } from 'mongodb';
+import { ProductsRepository } from './product.repository';
+// import { ProductRepository } from './product.repository';
 
 registerEnumType(ProductCategory, { name: 'ProductCategory' });
 
@@ -12,10 +14,12 @@ registerEnumType(ProductCategory, { name: 'ProductCategory' });
 -- class-validator
 */
 
-@Entity({ tableName: 'products' })
+@Entity()
 @InputType('ProductInput')
 @ObjectType('ProductType')
-export class Product {
+export class Products {
+
+  [EntityRepositoryType]?: ProductsRepository;
 
   @PrimaryKey()
   _productId: ObjectID;
@@ -51,7 +55,7 @@ export class Product {
 
   @Property({ default: 1 })
   @Field({ defaultValue: 1 })
-  @IsPositive({ message: `Selling Price needs to be greater than zero.`})
+  @IsPositive({ message: `Selling Price needs to be greater than zero.` })
   sellingPrice: number;
 
   @Property()

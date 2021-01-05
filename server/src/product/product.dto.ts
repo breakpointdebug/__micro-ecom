@@ -1,11 +1,11 @@
 import { Field, InputType, PickType } from '@nestjs/graphql';
 import { IsOptional, Length } from 'class-validator';
 import { ProductCategory } from './product.enum';
-import { Product } from './product.type';
+import { Products } from './product.entity';
 
 @InputType()
 class ProductBaseDTO extends
-  PickType(Product,
+  PickType(Products,
     [
       'sku',
       'image',

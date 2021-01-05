@@ -13,12 +13,15 @@ import { AuthModule } from './auth/auth.module';
 
 import * as config from 'config';
 
-import { Product } from './product/product.type';
+import { Products } from './product/product.entity';
 import { Account } from './account/account.type';
 import { MailerModule } from './mailer/mailer.module';
+import { EntityManager } from '@mikro-orm/core';
 
 const dbConf = config.get('config.db');
 const gqlConf = config.get('config.gql');
+
+
 
 // TODO: SAFE auto-migrations
 // https://mikro-orm.io/docs/migrations
@@ -29,9 +32,10 @@ const gqlConf = config.get('config.gql');
       type: dbConf.type,
       dbName: dbConf.name,
       clientUrl: dbConf.url_remote,
-      entities: [ Product ],
+      autoLoadEntities: true,
       highlighter: new MongoHighlighter(),  // temporary
-      debug: true,  // temporary
+      // debug: true,  // temporary
+
       // migrations: {
       //   tableName: dbConf.migrations,
       //   path: './migrations',
@@ -55,4 +59,4 @@ const gqlConf = config.get('config.gql');
     // MailerModule
   ]
 })
-export class AppModule {}
+export class AppModule { }
